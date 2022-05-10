@@ -11,7 +11,6 @@ const Reservation = async(req, res) =>{
         idproduit,
         iduser,
         ordonnance: req.file.filename,
-        qte_avant_reserv,
     });
 
     let existingproduit;
@@ -141,7 +140,7 @@ const Annuler = async(req, res) => {
         return res.status(500).json({success: false, message: "something went wrong with DB in finding", error: error})
     }
      
-     existingproduit.qte =  existingproduit.qte_initial
+     existingproduit.qte =  existingproduit.qte + existingreservation.qte_reserv
     
     try {
         await existingproduit.save();

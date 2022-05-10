@@ -153,13 +153,6 @@ const getUserReservations = async(req, res) => {
 
 }
 
-const getUserMedicsReservations = async(req, res) => {
-
-
-}
-
-
-
 const Delete = async(req, res) => {
 
     const { id } = req.params;
@@ -229,4 +222,3 @@ exports.updateproduit = updateproduit
 exports.getUserMedics = getUserMedics 
 exports.categorie = categorie
 exports.getUserReservations = getUserReservations
-exports.getUserMedicsReservations = getUserMedicsReservations

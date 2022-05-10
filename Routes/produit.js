@@ -9,8 +9,6 @@ route.post('/', produitController.getUserMedics);
 
 route.post('/reservation', produitController.getUserReservations);
 
-route.post('/medics_reservation', produitController.getUserMedicsReservations);
-
 route.get('/:id', produitController.FindById);
 
 route.patch('/:id', fileuploader.single('image'), produitController.updateproduit);

@@ -11,8 +11,6 @@ route.patch('/:id', fileuploader.single('avatar'),  userController.updateuser);
 
 route.delete('/:id', userController.Delete);
 
-// route.post('/add', fileuploader.single('image'), userController.Ajouter);
-
 route.post('/login',userController.login);
 
 route.post('/register',fileuploader.single('avatar'), userController.Register);

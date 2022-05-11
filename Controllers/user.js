@@ -1,5 +1,4 @@
 const user = require('../models/user');
-
 const bcrypt = require('bcryptjs');
 
 const Ajouter = async (req, res) => {
@@ -21,7 +20,48 @@ const Ajouter = async (req, res) => {
 }
 
 const Register = async (req, res) => {
-    const { email, password, nom, prenom, adresse, tel } = req.body;
+    const { email, password, nom, prenom, adresse, tel, confirm_password } = req.body;
+
+    if(email=='' || password =='' || nom=='' || prenom ==''|| adresse=='' || isNaN(tel) ){
+        return res.status(405).json({success: false, message: "Tous les champs sont obligatoires!"})
+    }
+
+    const regx = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+    if(!regx.test(email)){
+        return res.status(405).json({success: false, message: "E-mail ivalide!"})
+    }  
+
+    let existinguser;
+    try {
+        existinguser = await user.findOne({ email: email});
+    } catch (error) {
+        return res.status(500).json({success: false, message: "something went wrong with DB", error: error})
+    }
+    
+    if (existinguser) {
+        return res.status(405).json({success: false, message: "Utilisateur déja pas!"})
+    }
+
+    if(nom.length <3){
+        return res.status(405).json({success: false, message: "Le nom doit être supérieur à 3 caractères!"})
+    }
+    if(prenom.length <3){
+        return res.status(405).json({success: false, message: "Le prénom doit être supérieur à 3 caractères!"})
+    }
+    if(adresse.length <3){
+        return res.status(405).json({success: false, message: "L'adresse doit être supérieur à 3 caractères!"})
+    }
+    if(tel.length != 8){
+        return res.status(405).json({success: false, message: "Le numéro de téléphone doit être composé de 8 chiffres!"})
+    }
+    if(password.length <8){
+        return res.status(405).json({success: false, message: "Le mot de passe doit être composé au moins de 8 caractères!"})
+    }
+    // if (password !== confirm_password){
+    //     return res.status(405).json({success: false, message: "Le mot de passe ne correspond pas!"})
+    // }
+    
+ 
     const hashedPass = await bcrypt.hash(password, 10);
 
     let avatar= 'avatar.png';
@@ -37,12 +77,14 @@ const Register = async (req, res) => {
         tel,
         avatar
     });
+    
 
     try {
         await NewUser.save();
     } catch (error) {
         res.status(500).json({message: "something went wrong with DB", error: error})
     }
+
     
     res.status(201).json({message: "success", data: NewUser});
 }
@@ -50,6 +92,15 @@ const Register = async (req, res) => {
 const login = async (req, res) => {
 
     const {email, password } = req.body;
+
+    if(email=='' || password ==''){
+        return res.status(405).json({success: false, message: "Tous les champs sont obligatoires!"})
+    }
+
+    const regx = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+    if(!regx.test(email)){
+        return res.status(405).json({success: false, message: "E-mail ivalide!"})
+    } 
     console.log(req.body);
     let existinguser;
     try {
@@ -59,16 +110,16 @@ const login = async (req, res) => {
     }
     
     if (!existinguser) {
-        return res.status(405).json({success: false, message: "User Doesn't Exist!!"})
+        return res.status(405).json({success: false, message: "L'utilisateur n'existe pas!"})
     }
 
     let check = await bcrypt.compare( password, existinguser.password);
 
     if (!check) {
-        return res.status(405).json({success: false, message: "check your Password!!"})
+        return res.status(405).json({success: false, message: "Mot de passe incorrect!"})
     }
 
-    return res.status(200).json({success: true, message: "Welcome", data: existinguser});
+    return res.status(200).json({success: true, message: "Bienvenue", data: existinguser});
 
 }
 

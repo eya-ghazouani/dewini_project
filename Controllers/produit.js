@@ -7,6 +7,7 @@ const bcrypt = require('bcryptjs');
 
 const Ajouter = async (req, res) => {
     const { title, qte, deadline, type,forme, category, userid } = req.body;
+    
     console.log(req.body);
     const Newproduit = new produit({
         title,
@@ -181,6 +182,10 @@ const Delete = async(req, res) => {
 const updateproduit = async(req, res) => {
 
     const { title, qte, deadline, type,forme } = req.body;
+    if(title=='' || deadline =='' || type=='' || forme ==''|| !qte ){
+        return res.status(405).json({success: false, message: "Les champs ne peuvent pas etre vides!"})
+    }
+
     const { id } = req.params;
 
     let existingproduit;
@@ -210,7 +215,7 @@ const updateproduit = async(req, res) => {
         return res.status(500).json({success: false, message: "something went wrong with DB in saving", error: error})
     }
     
-    return res.status(201).json({success: true, message: "Product updated successfully ", data: existingproduit});
+    return res.status(201).json({success: true, message: "Produit modifié avec succès ", data: existingproduit});
 
 }
 

@@ -5,6 +5,11 @@ const user = require('../models/user');
 const Reservation = async(req, res) =>{
     const { qte_reserv , date_reserv , iduser, idproduit} = req.body;
 
+    if(!qte_reserv){
+        return res.status(405).json({success: false, message: "Tous les champs sont obligatoires!"})
+    }
+    
+
     const NewReservation= new reservation({
         qte_reserv,
         date_reserv,
@@ -47,7 +52,7 @@ const Reservation = async(req, res) =>{
         return res.status(500).json({success: false, message: "something went wrong with DB", error: error})
     }
     
-    return res.status(201).json({success: true, message: "success", data: NewReservation});
+    return res.status(201).json({success: true, message: "Reservation effectué, attendez la confirmation", data: NewReservation});
 
 }
 

@@ -182,9 +182,6 @@ const Delete = async(req, res) => {
 const updateproduit = async(req, res) => {
 
     const { title, qte, deadline, type,forme } = req.body;
-    if(title=='' || deadline =='' || type=='' || forme ==''|| !qte ){
-        return res.status(405).json({success: false, message: "Les champs ne peuvent pas etre vides!"})
-    }
 
     const { id } = req.params;
 

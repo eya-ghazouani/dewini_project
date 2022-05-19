@@ -22,15 +22,6 @@ const Ajouter = async (req, res) => {
 const Register = async (req, res) => {
     const { email, password, nom, prenom, adresse, tel, confirm_password } = req.body;
 
-    if(email=='' || password =='' || nom=='' || prenom ==''|| adresse=='' || isNaN(tel) ){
-        return res.status(405).json({success: false, message: "Tous les champs sont obligatoires!"})
-    }
-
-    const regx = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-    if(!regx.test(email)){
-        return res.status(405).json({success: false, message: "E-mail ivalide!"})
-    }  
-
     let existinguser;
     try {
         existinguser = await user.findOne({ email: email});
@@ -39,27 +30,10 @@ const Register = async (req, res) => {
     }
     
     if (existinguser) {
-        return res.status(405).json({success: false, message: "Utilisateur déja pas!"})
+        return res.status(405).json({success: false, message: "Utilisateur déja existe!"})
     }
 
-    if(nom.length <3){
-        return res.status(405).json({success: false, message: "Le nom doit être supérieur à 3 caractères!"})
-    }
-    if(prenom.length <3){
-        return res.status(405).json({success: false, message: "Le prénom doit être supérieur à 3 caractères!"})
-    }
-    if(adresse.length <3){
-        return res.status(405).json({success: false, message: "L'adresse doit être supérieur à 3 caractères!"})
-    }
-    if(tel.length != 8){
-        return res.status(405).json({success: false, message: "Le numéro de téléphone doit être composé de 8 chiffres!"})
-    }
-    if(password.length <8){
-        return res.status(405).json({success: false, message: "Le mot de passe doit être composé au moins de 8 caractères!"})
-    }
-    // if (password !== confirm_password){
-    //     return res.status(405).json({success: false, message: "Le mot de passe ne correspond pas!"})
-    // }
+ 
     
  
     const hashedPass = await bcrypt.hash(password, 10);

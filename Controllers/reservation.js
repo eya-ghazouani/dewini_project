@@ -4,10 +4,6 @@ const user = require('../models/user');
 
 const Reservation = async(req, res) =>{
     const { qte_reserv , date_reserv , iduser, idproduit} = req.body;
-
-    if(!qte_reserv){
-        return res.status(405).json({success: false, message: "Tous les champs sont obligatoires!"})
-    }
     
 
     const NewReservation= new reservation({

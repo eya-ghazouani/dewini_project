@@ -115,7 +115,7 @@ let existingproduit;
         return res.status(500).json({success: false, message: "something went wrong with DB in saving", error: error})
     }
     
-    return res.status(201).json({success: true, message: "Reservation updated successfully ", data: existingreservation});
+    return res.status(201).json({success: true, message: "Reservation modifié avec succès ", data: existingreservation});
 
 }
 

@@ -38,7 +38,7 @@ const Register = async (req, res) => {
  
     const hashedPass = await bcrypt.hash(password, 10);
 
-    let avatar= 'avatar.png';
+    let avatar= 'avataar.png';
     if (req.file) {
         avatar= req.file.filename;
     }

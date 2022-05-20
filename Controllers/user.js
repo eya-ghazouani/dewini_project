@@ -188,7 +188,7 @@ const updateuser = async(req, res) => {
         return res.status(500).json({success: false, message: "something went wrong with DB", error: error})
     }
     
-    return res.status(201).json({success: true, message: "Updates succefelly", data: existinguser});
+    return res.status(201).json({success: true, message: "Vos coordonnées modifiées avec succès", data: existinguser});
 
 }
 

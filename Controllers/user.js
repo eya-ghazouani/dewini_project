@@ -30,12 +30,9 @@ const Register = async (req, res) => {
     }
     
     if (existinguser) {
-        return res.status(405).json({success: false, message: "Utilisateur déja existe!"})
+        return res.status(405).json({success: false, message: "Cet utilisateur déja existe."})
     }
 
- 
-    
- 
     const hashedPass = await bcrypt.hash(password, 10);
 
     let avatar= 'avataar.png';
@@ -67,15 +64,7 @@ const login = async (req, res) => {
 
     const {email, password } = req.body;
 
-    if(email=='' || password ==''){
-        return res.status(405).json({success: false, message: "Tous les champs sont obligatoires!"})
-    }
-
-    const regx = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
-    if(!regx.test(email)){
-        return res.status(405).json({success: false, message: "E-mail ivalide!"})
-    } 
-    console.log(req.body);
+    
     let existinguser;
     try {
         existinguser = await user.findOne({ email: email});
@@ -84,13 +73,13 @@ const login = async (req, res) => {
     }
     
     if (!existinguser) {
-        return res.status(405).json({success: false, message: "L'utilisateur n'existe pas!"})
+        return res.status(405).json({success: false, message: "Email ou mot de passe incorrect."})
     }
 
     let check = await bcrypt.compare( password, existinguser.password);
 
     if (!check) {
-        return res.status(405).json({success: false, message: "Mot de passe incorrect!"})
+        return res.status(405).json({success: false, message: "Email ou mot de passe incorrect."})
     }
 
     return res.status(200).json({success: true, message: "Bienvenue", data: existinguser});
